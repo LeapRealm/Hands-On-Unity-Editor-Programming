@@ -24,8 +24,8 @@ public class MyEditorWindow : EditorWindow
 
     #region Layout System을 이해하자
 
-    private Vector3 leftScrollPosition;
-    private Vector3 rightScrollPosition;
+    // private Vector3 leftScrollPosition;
+    // private Vector3 rightScrollPosition;
 
     #endregion
     
@@ -95,159 +95,197 @@ public class MyEditorWindow : EditorWindow
 
         #region Layout System을 이해하자
 
-        EditorGUILayout.BeginVertical();
-        {
-            for (int i = 0; i < 3; i++)
-                EditorGUILayout.LabelField("Label 00");
-        }
-        EditorGUILayout.EndVertical();
-
-        EditorGUILayout.Space(5);
-
-        EditorGUILayout.BeginVertical();
-        {
-            for (int i = 0; i < 3; i++)
-                EditorGUILayout.LabelField("Label 01");
-        }
-        EditorGUILayout.EndVertical();
-
-        EditorGUILayout.Space(5);
+        // EditorGUILayout.BeginVertical();
+        // {
+        //     for (int i = 0; i < 3; i++)
+        //         EditorGUILayout.LabelField("Label 00");
+        // }
+        // EditorGUILayout.EndVertical();
+        //
+        // EditorGUILayout.Space(5);
+        //
+        // EditorGUILayout.BeginVertical();
+        // {
+        //     for (int i = 0; i < 3; i++)
+        //         EditorGUILayout.LabelField("Label 01");
+        // }
+        // EditorGUILayout.EndVertical();
+        //
+        // EditorGUILayout.Space(5);
+        //
+        // EditorGUILayout.BeginHorizontal();
+        // {
+        //     for (int i = 0; i < 10; i++)
+        //         EditorGUILayout.LabelField("Label 02");
+        // }
+        // EditorGUILayout.EndHorizontal();
+        //
+        // EditorGUILayout.BeginHorizontal();
+        // {
+        //     for (int i = 0; i < 10; i++)
+        //         EditorGUILayout.LabelField("Label 03");
+        // }
+        // EditorGUILayout.EndHorizontal();
+        //
+        // EditorGUILayout.Space(5);
+        //
+        // for (int i = 0; i < 5; i++)
+        // {
+        //     EditorGUILayout.BeginVertical();
+        //     {
+        //         EditorGUILayout.LabelField($"Title : {i}");
+        //
+        //         float backUpFieldWidth = EditorGUIUtility.fieldWidth;
+        //         float backUpLabelWidth = EditorGUIUtility.labelWidth;
+        //
+        //         EditorGUIUtility.fieldWidth = 50;
+        //         EditorGUIUtility.labelWidth = 50;
+        //
+        //         EditorGUILayout.BeginHorizontal();
+        //         {
+        //             for (int j = 0; j < 3; j++)
+        //             {
+        //                 EditorGUILayout.TextField(j.ToString(), "Put data here");
+        //
+        //                 bool isLastData = (j == 2);
+        //                 if (isLastData == false)
+        //                     EditorGUILayout.Space(6);
+        //             }
+        //         }
+        //         EditorGUILayout.EndHorizontal();
+        //         
+        //         EditorGUIUtility.fieldWidth = backUpFieldWidth;
+        //         EditorGUIUtility.labelWidth = backUpLabelWidth;
+        //
+        //     }
+        //     EditorGUILayout.EndVertical();
+        //     
+        //     EditorGUILayout.Space(10);
+        //
+        //     if (i < 4)
+        //         EditorGUILayout.LabelField("", GUI.skin.horizontalScrollbar);
+        // }
+        //
+        // EditorGUILayout.Space(5);
+        //
+        // Vector2 offset = new Vector2(20, 20);
+        // Rect rectArea = new Rect(offset.x, offset.y, position.width - offset.x * 2, 75);
+        //
+        // GUILayout.BeginArea(rectArea, GUI.skin.window);
+        // {
+        //     EditorGUILayout.BeginHorizontal();
+        //     {
+        //         EditorGUILayout.LabelField("Label Field");
+        //         EditorGUILayout.LabelField("Label Field");
+        //         EditorGUILayout.LabelField("Label Field");
+        //         EditorGUILayout.LabelField("Label Field");
+        //     }
+        //     EditorGUILayout.EndHorizontal();
+        // }
+        // GUILayout.EndArea();
+        //
+        // offset = new Vector2(20, 20);
+        // rectArea = new Rect(offset.x, offset.y, position.width - offset.x * 2, 100);
+        //
+        // GUILayout.BeginArea(rectArea, GUI.skin.window);
+        // {
+        //     Rect subRect = rectArea;
+        //     subRect.Set(0, 0, rectArea.width * 0.5f, rectArea.height);
+        //
+        //     GUILayout.BeginArea(subRect, "Sub 00", GUI.skin.window);
+        //     {
+        //         leftScrollPosition = EditorGUILayout.BeginScrollView(leftScrollPosition);
+        //         {
+        //             EditorGUILayout.BeginVertical();
+        //             {
+        //                 for (int i = 0; i < 30; i++)
+        //                     EditorGUILayout.LabelField($"Label Field {i}");
+        //             }
+        //             EditorGUILayout.EndVertical();
+        //         }
+        //         EditorGUILayout.EndScrollView();
+        //     }
+        //     GUILayout.EndArea();
+        //
+        //     subRect.x += subRect.width;
+        //     GUILayout.BeginArea(subRect, "Sub 01", GUI.skin.window);
+        //     {
+        //         rightScrollPosition = EditorGUILayout.BeginScrollView(rightScrollPosition);
+        //         {
+        //             EditorGUILayout.BeginHorizontal();
+        //             {
+        //                 for (int i = 0; i < 30; i++)
+        //                     EditorGUILayout.LabelField($"Label Field {i}");
+        //             }
+        //             EditorGUILayout.EndHorizontal();
+        //         }
+        //         EditorGUILayout.EndScrollView();
+        //     }
+        //     GUILayout.EndArea();
+        // }
+        // GUILayout.EndArea();
+        //
+        // using (var scope = new EditorGUILayout.HorizontalScope())
+        // {
+        //     if (GUI.Button(scope.rect, GUIContent.none))
+        //         Debug.Log("Clicked");
+        //
+        //     for (int i = 0; i < 5; i++)
+        //     {
+        //         GUILayout.Label("Label");
+        //         GUILayout.Box(EditorGUIUtility.FindTexture("BuildSettings.Editor"));
+        //     }
+        // }
+        //
+        // using (var scope = new EditorGUILayout.VerticalScope(GUILayout.Width(100)))
+        // {
+        //     if (GUI.Button(scope.rect, GUIContent.none))
+        //         Debug.Log("Clicked");
+        //
+        //     for (int i = 0; i < 5; i++)
+        //     {
+        //         GUILayout.Label("Label");
+        //         GUILayout.Box(EditorGUIUtility.FindTexture("BuildSettings.Editor"));
+        //     }
+        // }
         
-        EditorGUILayout.BeginHorizontal();
-        {
-            for (int i = 0; i < 10; i++)
-                EditorGUILayout.LabelField("Label 02");
-        }
-        EditorGUILayout.EndHorizontal();
+        #endregion
 
-        EditorGUILayout.BeginHorizontal();
-        {
-            for (int i = 0; i < 10; i++)
-                EditorGUILayout.LabelField("Label 03");
-        }
-        EditorGUILayout.EndHorizontal();
+        #region 같은 GUI도 여러가지 방법으로 그려보자
 
-        EditorGUILayout.Space(5);
+        GUIContent myContent = new GUIContent();
         
-        for (int i = 0; i < 5; i++)
-        {
-            EditorGUILayout.BeginVertical();
-            {
-                EditorGUILayout.LabelField($"Title : {i}");
-
-                float backUpFieldWidth = EditorGUIUtility.fieldWidth;
-                float backUpLabelWidth = EditorGUIUtility.labelWidth;
-
-                EditorGUIUtility.fieldWidth = 50;
-                EditorGUIUtility.labelWidth = 50;
-
-                EditorGUILayout.BeginHorizontal();
-                {
-                    for (int j = 0; j < 3; j++)
-                    {
-                        EditorGUILayout.TextField(j.ToString(), "Put data here");
-
-                        bool isLastData = (j == 2);
-                        if (isLastData == false)
-                            EditorGUILayout.Space(6);
-                    }
-                }
-                EditorGUILayout.EndHorizontal();
-                
-                EditorGUIUtility.fieldWidth = backUpFieldWidth;
-                EditorGUIUtility.labelWidth = backUpLabelWidth;
-
-            }
-            EditorGUILayout.EndVertical();
-            
-            EditorGUILayout.Space(10);
-
-            if (i < 4)
-                EditorGUILayout.LabelField("", GUI.skin.horizontalScrollbar);
-        }
+        myContent.text = "textContent";
+        myContent.image = EditorGUIUtility.FindTexture("BuildSettings.Editor");
         
-        EditorGUILayout.Space(5);
+        EditorGUILayout.LabelField(myContent);
 
-        Vector2 offset = new Vector2(20, 20);
-        Rect rectArea = new Rect(offset.x, offset.y, position.width - offset.x * 2, 75);
+        myContent.tooltip = "my tool tip";
         
-        GUILayout.BeginArea(rectArea, GUI.skin.window);
-        {
-            EditorGUILayout.BeginHorizontal();
-            {
-                EditorGUILayout.LabelField("Label Field");
-                EditorGUILayout.LabelField("Label Field");
-                EditorGUILayout.LabelField("Label Field");
-                EditorGUILayout.LabelField("Label Field");
-            }
-            EditorGUILayout.EndHorizontal();
-        }
-        GUILayout.EndArea();
+        GUILayout.Button(myContent);
 
-        offset = new Vector2(20, 20);
-        rectArea = new Rect(offset.x, offset.y, position.width - offset.x * 2, 100);
-        
-        GUILayout.BeginArea(rectArea, GUI.skin.window);
-        {
-            Rect subRect = rectArea;
-            subRect.Set(0, 0, rectArea.width * 0.5f, rectArea.height);
+        GUIStyle myStyle = new GUIStyle();
 
-            GUILayout.BeginArea(subRect, "Sub 00", GUI.skin.window);
-            {
-                leftScrollPosition = EditorGUILayout.BeginScrollView(leftScrollPosition);
-                {
-                    EditorGUILayout.BeginVertical();
-                    {
-                        for (int i = 0; i < 30; i++)
-                            EditorGUILayout.LabelField($"Label Field {i}");
-                    }
-                    EditorGUILayout.EndVertical();
-                }
-                EditorGUILayout.EndScrollView();
-            }
-            GUILayout.EndArea();
+        myStyle.fontSize = 15;
+        myStyle.fontStyle = FontStyle.BoldAndItalic;
+        myStyle.normal.textColor = Color.green;
 
-            subRect.x += subRect.width;
-            GUILayout.BeginArea(subRect, "Sub 01", GUI.skin.window);
-            {
-                rightScrollPosition = EditorGUILayout.BeginScrollView(rightScrollPosition);
-                {
-                    EditorGUILayout.BeginHorizontal();
-                    {
-                        for (int i = 0; i < 30; i++)
-                            EditorGUILayout.LabelField($"Label Field {i}");
-                    }
-                    EditorGUILayout.EndHorizontal();
-                }
-                EditorGUILayout.EndScrollView();
-            }
-            GUILayout.EndArea();
-        }
-        GUILayout.EndArea();
+        GUILayout.Label("Label", myStyle);
 
-        using (var scope = new EditorGUILayout.HorizontalScope())
-        {
-            if (GUI.Button(scope.rect, GUIContent.none))
-                Debug.Log("Clicked");
+        myStyle = new GUIStyle("button");
 
-            for (int i = 0; i < 5; i++)
-            {
-                GUILayout.Label("Label");
-                GUILayout.Box(EditorGUIUtility.FindTexture("BuildSettings.Editor"));
-            }
-        }
+        myStyle.fontSize = 15;
+        myStyle.normal.textColor = Color.red;
+        myStyle.hover = new GUIStyleState() { textColor = Color.green };
 
-        using (var scope = new EditorGUILayout.VerticalScope(GUILayout.Width(100)))
-        {
-            if (GUI.Button(scope.rect, GUIContent.none))
-                Debug.Log("Clicked");
+        GUILayout.Button("Button", myStyle);
 
-            for (int i = 0; i < 5; i++)
-            {
-                GUILayout.Label("Label");
-                GUILayout.Box(EditorGUIUtility.FindTexture("BuildSettings.Editor"));
-            }
-        }
+        // EditorStyles, GUI.skin, GUI.skin.GetStyle을 이용해서 미리 정의된 스타일을 가져올 수 있음
+        GUILayout.Label("Bold Label", EditorStyles.boldLabel);
+        GUILayout.Box("box", GUI.skin.window);
+
+        if (GUILayout.Button("Button", GUI.skin.textArea))
+            Debug.Log("Clicked");
         
         #endregion
     }
