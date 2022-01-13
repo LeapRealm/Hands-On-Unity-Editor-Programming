@@ -253,40 +253,68 @@ public class MyEditorWindow : EditorWindow
 
         #region 같은 GUI도 여러가지 방법으로 그려보자
 
-        GUIContent myContent = new GUIContent();
+        // GUIContent myContent = new GUIContent();
+        //
+        // myContent.text = "textContent";
+        // myContent.image = EditorGUIUtility.FindTexture("BuildSettings.Editor");
+        //
+        // EditorGUILayout.LabelField(myContent);
+        //
+        // myContent.tooltip = "my tool tip";
+        //
+        // GUILayout.Button(myContent);
+        //
+        // GUIStyle myStyle = new GUIStyle();
+        //
+        // myStyle.fontSize = 15;
+        // myStyle.fontStyle = FontStyle.BoldAndItalic;
+        // myStyle.normal.textColor = Color.green;
+        //
+        // GUILayout.Label("Label", myStyle);
+        //
+        // myStyle = new GUIStyle("button");
+        //
+        // myStyle.fontSize = 15;
+        // myStyle.normal.textColor = Color.red;
+        // myStyle.hover = new GUIStyleState() { textColor = Color.green };
+        //
+        // GUILayout.Button("Button", myStyle);
+        //
+        // // EditorStyles, GUI.skin, GUI.skin.GetStyle을 이용해서 미리 정의된 스타일을 가져올 수 있음
+        // GUILayout.Label("Bold Label", EditorStyles.boldLabel);
+        // GUILayout.Box("box", GUI.skin.window);
+        //
+        // if (GUILayout.Button("Button", GUI.skin.textArea))
+        //     Debug.Log("Clicked");
         
-        myContent.text = "textContent";
-        myContent.image = EditorGUIUtility.FindTexture("BuildSettings.Editor");
-        
-        EditorGUILayout.LabelField(myContent);
+        #endregion
 
-        myContent.tooltip = "my tool tip";
-        
-        GUILayout.Button(myContent);
+        #region OnGUI의 실체 Event
 
-        GUIStyle myStyle = new GUIStyle();
+        Rect area = EditorGUILayout.BeginVertical(GUILayout.Width(200));
+        {
+            GUI.Box(area, GUIContent.none);
+            
+            EditorGUILayout.LabelField("Label Field");
+            EditorGUILayout.LabelField("Label Field");
+        }
+        EditorGUILayout.EndVertical();
 
-        myStyle.fontSize = 15;
-        myStyle.fontStyle = FontStyle.BoldAndItalic;
-        myStyle.normal.textColor = Color.green;
+        if (Event.current.type == EventType.KeyDown)
+        {
+            if (Event.current.keyCode == KeyCode.Q || Event.current.keyCode == KeyCode.W || Event.current.keyCode == KeyCode.E)
+                Debug.Log($"'{Event.current.keyCode}' key is down");
+        }
 
-        GUILayout.Label("Label", myStyle);
+        if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
+            Debug.Log("Left mouse button is down");
 
-        myStyle = new GUIStyle("button");
+        if (Event.current.isMouse)
+            Event.current.Use();
 
-        myStyle.fontSize = 15;
-        myStyle.normal.textColor = Color.red;
-        myStyle.hover = new GUIStyleState() { textColor = Color.green };
+        if (GUILayout.Button("Try click"))
+            Debug.LogError("How did you click me?");
 
-        GUILayout.Button("Button", myStyle);
-
-        // EditorStyles, GUI.skin, GUI.skin.GetStyle을 이용해서 미리 정의된 스타일을 가져올 수 있음
-        GUILayout.Label("Bold Label", EditorStyles.boldLabel);
-        GUILayout.Box("box", GUI.skin.window);
-
-        if (GUILayout.Button("Button", GUI.skin.textArea))
-            Debug.Log("Clicked");
-        
         #endregion
     }
 }
