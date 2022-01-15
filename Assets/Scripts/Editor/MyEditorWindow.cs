@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -32,8 +31,8 @@ public class MyEditorWindow : EditorWindow
 
     #region EditorWindow에 응용
 
-    private Dictionary<SerializedObject, List<SerializedProperty>> targets = new Dictionary<SerializedObject, List<SerializedProperty>>();
-    private bool isFocused;
+    // private Dictionary<SerializedObject, List<SerializedProperty>> targets = new Dictionary<SerializedObject, List<SerializedProperty>>();
+    // private bool isFocused;
 
     #endregion
     
@@ -327,75 +326,75 @@ public class MyEditorWindow : EditorWindow
 
         #region EditorWindow에 응용
 
-        if (GUILayout.Button("Refresh"))
-        {
-            targets.Clear();
-
-            Character[] allCharacters = FindObjectsOfType<Character>();
-
-            if (allCharacters != null)
-            {
-                foreach (Character character in allCharacters)
-                {
-                    SerializedObject serializedObject = new SerializedObject(character);
-                    List<SerializedProperty> serializedProperties = new List<SerializedProperty>()
-                    {
-                        serializedObject.FindProperty(nameof(Character._gameObject)),
-                        serializedObject.FindProperty(nameof(Character._name)),
-                        serializedObject.FindProperty(nameof(Character._hp))
-                    };
-                    
-                    targets.Add(serializedObject, serializedProperties);
-                }
-            }
-        }
-
-        foreach (var pair in targets)
-        {
-            EditorGUI.BeginChangeCheck();
-            {
-                EditorGUILayout.LabelField(pair.Key.targetObject.name, EditorStyles.boldLabel);
-                EditorGUI.indentLevel++;
-                {
-                    foreach (var property in pair.Value)
-                        EditorGUILayout.PropertyField(property);
-                }
-                EditorGUI.indentLevel--;
-                
-                EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-            }
-            if (EditorGUI.EndChangeCheck())
-                pair.Key.ApplyModifiedProperties();
-        }
+        // if (GUILayout.Button("Refresh"))
+        // {
+        //     targets.Clear();
+        //
+        //     Character[] allCharacters = FindObjectsOfType<Character>();
+        //
+        //     if (allCharacters != null)
+        //     {
+        //         foreach (Character character in allCharacters)
+        //         {
+        //             SerializedObject serializedObject = new SerializedObject(character);
+        //             List<SerializedProperty> serializedProperties = new List<SerializedProperty>()
+        //             {
+        //                 serializedObject.FindProperty(nameof(Character._gameObject)),
+        //                 serializedObject.FindProperty(nameof(Character._name)),
+        //                 serializedObject.FindProperty(nameof(Character._hp))
+        //             };
+        //             
+        //             targets.Add(serializedObject, serializedProperties);
+        //         }
+        //     }
+        // }
+        //
+        // foreach (var pair in targets)
+        // {
+        //     EditorGUI.BeginChangeCheck();
+        //     {
+        //         EditorGUILayout.LabelField(pair.Key.targetObject.name, EditorStyles.boldLabel);
+        //         EditorGUI.indentLevel++;
+        //         {
+        //             foreach (var property in pair.Value)
+        //                 EditorGUILayout.PropertyField(property);
+        //         }
+        //         EditorGUI.indentLevel--;
+        //         
+        //         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        //     }
+        //     if (EditorGUI.EndChangeCheck())
+        //         pair.Key.ApplyModifiedProperties();
+        // }
 
         #endregion
     }
     
     #region EditorWindow에 응용
 
-    private void Update()
-    {
-        if (isFocused == false)
-        {
-            foreach (var item in targets)
-                item.Key.Update();
-            
-            Repaint();
-        }
-    }
-
-    private void OnFocus()
-    {
-        isFocused = true;
-
-        foreach (var item in targets)
-            item.Key.Update();
-    }
-
-    private void OnLostFocus()
-    {
-        isFocused = false;
-    }
+    // private void Update()
+    // {
+    //     if (isFocused == false)
+    //     {
+    //         foreach (var item in targets)
+    //             item.Key.Update();
+    //         
+    //         Repaint();
+    //     }
+    // }
+    //
+    // private void OnFocus()
+    // {
+    //     isFocused = true;
+    //
+    //     foreach (var item in targets)
+    //         item.Key.Update();
+    // }
+    //
+    // private void OnLostFocus()
+    // {
+    //     isFocused = false;
+    // }
 
     #endregion
 }
