@@ -12,9 +12,9 @@ public class CharacterCustomEditor : Editor
 
     private void OnEnable()
     {
-        _gameObject = serializedObject.FindProperty($"{nameof(Character._gameObject)}");
-        _name = serializedObject.FindProperty($"{nameof(Character._name)}");
-        _hp = serializedObject.FindProperty($"{nameof(Character._hp)}");
+        _gameObject = serializedObject.FindProperty(nameof(Character._gameObject));
+        _name = serializedObject.FindProperty(nameof(Character._name));
+        _hp = serializedObject.FindProperty(nameof(Character._hp));
 
         _character = (Character)target;
     }
