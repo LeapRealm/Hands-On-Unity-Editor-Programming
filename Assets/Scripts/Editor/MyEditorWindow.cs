@@ -291,29 +291,29 @@ public class MyEditorWindow : EditorWindow
 
         #region OnGUI의 실체 Event
 
-        Rect area = EditorGUILayout.BeginVertical(GUILayout.Width(200));
-        {
-            GUI.Box(area, GUIContent.none);
-            
-            EditorGUILayout.LabelField("Label Field");
-            EditorGUILayout.LabelField("Label Field");
-        }
-        EditorGUILayout.EndVertical();
-
-        if (Event.current.type == EventType.KeyDown)
-        {
-            if (Event.current.keyCode == KeyCode.Q || Event.current.keyCode == KeyCode.W || Event.current.keyCode == KeyCode.E)
-                Debug.Log($"'{Event.current.keyCode}' key is down");
-        }
-
-        if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
-            Debug.Log("Left mouse button is down");
-
-        if (Event.current.isMouse)
-            Event.current.Use();
-
-        if (GUILayout.Button("Try click"))
-            Debug.LogError("How did you click me?");
+        // Rect area = EditorGUILayout.BeginVertical(GUILayout.Width(200));
+        // {
+        //     GUI.Box(area, GUIContent.none);
+        //     
+        //     EditorGUILayout.LabelField("Label Field");
+        //     EditorGUILayout.LabelField("Label Field");
+        // }
+        // EditorGUILayout.EndVertical();
+        //
+        // if (Event.current.type == EventType.KeyDown)
+        // {
+        //     if (Event.current.keyCode == KeyCode.Q || Event.current.keyCode == KeyCode.W || Event.current.keyCode == KeyCode.E)
+        //         Debug.Log($"'{Event.current.keyCode}' key is down");
+        // }
+        //
+        // if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
+        //     Debug.Log("Left mouse button is down");
+        //
+        // if (Event.current.isMouse)
+        //     Event.current.Use();
+        //
+        // if (GUILayout.Button("Try click"))
+        //     Debug.LogError("How did you click me?");
 
         #endregion
     }
