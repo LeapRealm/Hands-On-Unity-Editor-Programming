@@ -368,6 +368,59 @@ public class MyEditorWindow : EditorWindow
         // }
 
         #endregion
+
+        #region 에셋 파일 관리 및 조작하는 방법
+
+        if (GUILayout.Button("모든 Material 찾기"))
+        {
+            string[] resultGuid = AssetDatabase.FindAssets("t:material");
+            if (resultGuid != null)
+            {
+                foreach (string guid in resultGuid)
+                {
+                    string path = AssetDatabase.GUIDToAssetPath(guid);
+                    Debug.Log($"GUID : {guid}, Path : {path}, Guid from path : {AssetDatabase.GUIDFromAssetPath(path)}");
+                }
+            }
+        }
+
+        if (GUILayout.Button("모든 Material 로드 및 적용"))
+        {
+            Renderer[] allRenderers = FindObjectsOfType<Renderer>();
+            if (allRenderers != null)
+            {
+                foreach (Renderer renderer in allRenderers)
+                    DestroyImmediate(renderer.gameObject);
+            }
+
+            string[] resultGuid = AssetDatabase.FindAssets("t:material");
+            if (resultGuid != null)
+            {
+                for (int i = 0; i < resultGuid.Length; i++)
+                {
+                    string guid = resultGuid[i];
+                    string path = AssetDatabase.GUIDToAssetPath(guid);
+                    
+                    Material loadedMaterial = AssetDatabase.LoadAssetAtPath<Material>(path);
+                    if (loadedMaterial != null)
+                    {
+                        Debug.Log($"Material Loaded : {path}");
+                        
+                        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                        cube.transform.position = new Vector3(i * 2, 0, 0);
+                        cube.GetComponent<Renderer>().material = loadedMaterial;
+                    }
+                }
+            }
+        }
+
+        if (GUILayout.Button("Asset 생성하기"))
+        {
+            Material loadedMaterial = new Material(Shader.Find("Standard"));
+            AssetDatabase.CreateAsset(loadedMaterial, $"Assets/Materials/AutoCreatedMaterial{Random.Range(0, 1000)}.mat");
+        }
+
+        #endregion
     }
     
     #region EditorWindow에 응용
