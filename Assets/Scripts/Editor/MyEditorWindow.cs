@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -33,6 +34,14 @@ public class MyEditorWindow : EditorWindow
 
     // private Dictionary<SerializedObject, List<SerializedProperty>> targets = new Dictionary<SerializedObject, List<SerializedProperty>>();
     // private bool isFocused;
+
+    #endregion
+    
+    #region 타 Editor 훔쳐오기
+
+    private Editor duplicatedEditor;
+    private Editor[] duplicatedDetailEditor;
+    private List<bool> detailFoldOut = new List<bool>();
 
     #endregion
     
@@ -371,53 +380,107 @@ public class MyEditorWindow : EditorWindow
 
         #region 에셋 파일 관리 및 조작하는 방법
 
-        if (GUILayout.Button("모든 Material 찾기"))
-        {
-            string[] resultGuid = AssetDatabase.FindAssets("t:material");
-            if (resultGuid != null)
-            {
-                foreach (string guid in resultGuid)
-                {
-                    string path = AssetDatabase.GUIDToAssetPath(guid);
-                    Debug.Log($"GUID : {guid}, Path : {path}, Guid from path : {AssetDatabase.GUIDFromAssetPath(path)}");
-                }
-            }
-        }
+        // if (GUILayout.Button("모든 Material 찾기"))
+        // {
+        //     string[] resultGuid = AssetDatabase.FindAssets("t:material");
+        //     if (resultGuid != null)
+        //     {
+        //         foreach (string guid in resultGuid)
+        //         {
+        //             string path = AssetDatabase.GUIDToAssetPath(guid);
+        //             Debug.Log($"GUID : {guid}, Path : {path}, Guid from path : {AssetDatabase.GUIDFromAssetPath(path)}");
+        //         }
+        //     }
+        // }
+        //
+        // if (GUILayout.Button("모든 Material 로드 및 적용"))
+        // {
+        //     Renderer[] allRenderers = FindObjectsOfType<Renderer>();
+        //     if (allRenderers != null)
+        //     {
+        //         foreach (Renderer renderer in allRenderers)
+        //             DestroyImmediate(renderer.gameObject);
+        //     }
+        //
+        //     string[] resultGuid = AssetDatabase.FindAssets("t:material");
+        //     if (resultGuid != null)
+        //     {
+        //         for (int i = 0; i < resultGuid.Length; i++)
+        //         {
+        //             string guid = resultGuid[i];
+        //             string path = AssetDatabase.GUIDToAssetPath(guid);
+        //             
+        //             Material loadedMaterial = AssetDatabase.LoadAssetAtPath<Material>(path);
+        //             if (loadedMaterial != null)
+        //             {
+        //                 Debug.Log($"Material Loaded : {path}");
+        //                 
+        //                 GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        //                 cube.transform.position = new Vector3(i * 2, 0, 0);
+        //                 cube.GetComponent<Renderer>().material = loadedMaterial;
+        //             }
+        //         }
+        //     }
+        // }
+        //
+        // if (GUILayout.Button("Asset 생성하기"))
+        // {
+        //     Material loadedMaterial = new Material(Shader.Find("Standard"));
+        //     AssetDatabase.CreateAsset(loadedMaterial, $"Assets/Materials/AutoCreatedMaterial{Random.Range(0, 1000)}.mat");
+        // }
 
-        if (GUILayout.Button("모든 Material 로드 및 적용"))
-        {
-            Renderer[] allRenderers = FindObjectsOfType<Renderer>();
-            if (allRenderers != null)
-            {
-                foreach (Renderer renderer in allRenderers)
-                    DestroyImmediate(renderer.gameObject);
-            }
+        #endregion
 
-            string[] resultGuid = AssetDatabase.FindAssets("t:material");
-            if (resultGuid != null)
+        #region 타 Editor 훔쳐오기
+
+        if (Selection.objects != null && Selection.objects.Length == 1)
+        {
+            Object target = Selection.objects[0];
+            if (duplicatedEditor == null || duplicatedEditor.name != target.name)
             {
-                for (int i = 0; i < resultGuid.Length; i++)
+                duplicatedEditor = Editor.CreateEditor(target);
+                
+                GameObject go = target as GameObject;
+                if (go != null)
                 {
-                    string guid = resultGuid[i];
-                    string path = AssetDatabase.GUIDToAssetPath(guid);
-                    
-                    Material loadedMaterial = AssetDatabase.LoadAssetAtPath<Material>(path);
-                    if (loadedMaterial != null)
+                    Component[] allComponents = go.GetComponents(typeof(Component));
+                    if (allComponents != null)
                     {
-                        Debug.Log($"Material Loaded : {path}");
-                        
-                        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                        cube.transform.position = new Vector3(i * 2, 0, 0);
-                        cube.GetComponent<Renderer>().material = loadedMaterial;
+                        duplicatedDetailEditor = new Editor[allComponents.Length];
+                        for (int i = 0; i < allComponents.Length; i++)
+                        {
+                            detailFoldOut.Add(false);
+                            duplicatedDetailEditor[i] = Editor.CreateEditor(allComponents[i]);
+                        }
                     }
                 }
+                else
+                {
+                    detailFoldOut.Clear();
+                    duplicatedDetailEditor = null;
+                }
             }
         }
-
-        if (GUILayout.Button("Asset 생성하기"))
+        else
         {
-            Material loadedMaterial = new Material(Shader.Find("Standard"));
-            AssetDatabase.CreateAsset(loadedMaterial, $"Assets/Materials/AutoCreatedMaterial{Random.Range(0, 1000)}.mat");
+            duplicatedEditor = null;
+        }
+
+        if (duplicatedEditor != null)
+        {
+            duplicatedEditor.DrawHeader();
+            duplicatedEditor.OnInspectorGUI();
+
+            if (duplicatedDetailEditor != null)
+            {
+                for (int i = 0; i < duplicatedDetailEditor.Length; i++)
+                {
+                    detailFoldOut[i] = EditorGUILayout.Foldout(detailFoldOut[i], $"{duplicatedDetailEditor[i].GetType()}");
+
+                    if (detailFoldOut[i])
+                        duplicatedDetailEditor[i].OnInspectorGUI();
+                }
+            }
         }
 
         #endregion
