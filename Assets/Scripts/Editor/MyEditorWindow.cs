@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MyEditorWindow : EditorWindow
 {
@@ -39,9 +39,9 @@ public class MyEditorWindow : EditorWindow
     
     #region 타 Editor 훔쳐오기
 
-    private Editor duplicatedEditor;
-    private Editor[] duplicatedDetailEditor;
-    private List<bool> detailFoldOut = new List<bool>();
+    // private Editor duplicatedEditor;
+    // private Editor[] duplicatedDetailEditor;
+    // private List<bool> detailFoldOut = new List<bool>();
 
     #endregion
     
@@ -433,54 +433,83 @@ public class MyEditorWindow : EditorWindow
 
         #region 타 Editor 훔쳐오기
 
-        if (Selection.objects != null && Selection.objects.Length == 1)
+        // if (Selection.objects != null && Selection.objects.Length == 1)
+        // {
+        //     Object target = Selection.objects[0];
+        //     if (duplicatedEditor == null || duplicatedEditor.name != target.name)
+        //     {
+        //         duplicatedEditor = Editor.CreateEditor(target);
+        //         
+        //         GameObject go = target as GameObject;
+        //         if (go != null)
+        //         {
+        //             Component[] allComponents = go.GetComponents(typeof(Component));
+        //             if (allComponents != null)
+        //             {
+        //                 duplicatedDetailEditor = new Editor[allComponents.Length];
+        //                 for (int i = 0; i < allComponents.Length; i++)
+        //                 {
+        //                     detailFoldOut.Add(false);
+        //                     duplicatedDetailEditor[i] = Editor.CreateEditor(allComponents[i]);
+        //                 }
+        //             }
+        //         }
+        //         else
+        //         {
+        //             detailFoldOut.Clear();
+        //             duplicatedDetailEditor = null;
+        //         }
+        //     }
+        // }
+        // else
+        // {
+        //     duplicatedEditor = null;
+        // }
+        //
+        // if (duplicatedEditor != null)
+        // {
+        //     duplicatedEditor.DrawHeader();
+        //     duplicatedEditor.OnInspectorGUI();
+        //
+        //     if (duplicatedDetailEditor != null)
+        //     {
+        //         for (int i = 0; i < duplicatedDetailEditor.Length; i++)
+        //         {
+        //             detailFoldOut[i] = EditorGUILayout.Foldout(detailFoldOut[i], $"{duplicatedDetailEditor[i].GetType()}");
+        //
+        //             if (detailFoldOut[i])
+        //                 duplicatedDetailEditor[i].OnInspectorGUI();
+        //         }
+        //     }
+        // }
+
+        #endregion
+
+        #region 유저의 오브젝트 선택 직접 제어하기
+
+        if (GUILayout.Button("Scene에 있는 모든 GameObject 선택하기"))
         {
-            Object target = Selection.objects[0];
-            if (duplicatedEditor == null || duplicatedEditor.name != target.name)
+            GameObject[] targets = FindObjectsOfType<GameObject>(true);
+            if (targets != null)
+                Selection.objects = targets;
+        }
+
+        if (GUILayout.Button("모든 Text 선택하기"))
+        {
+            Text[] targets = FindObjectsOfType<Text>();
+            if (targets != null)
             {
-                duplicatedEditor = Editor.CreateEditor(target);
-                
-                GameObject go = target as GameObject;
-                if (go != null)
-                {
-                    Component[] allComponents = go.GetComponents(typeof(Component));
-                    if (allComponents != null)
-                    {
-                        duplicatedDetailEditor = new Editor[allComponents.Length];
-                        for (int i = 0; i < allComponents.Length; i++)
-                        {
-                            detailFoldOut.Add(false);
-                            duplicatedDetailEditor[i] = Editor.CreateEditor(allComponents[i]);
-                        }
-                    }
-                }
-                else
-                {
-                    detailFoldOut.Clear();
-                    duplicatedDetailEditor = null;
-                }
+                GameObject[] gameObjects = new GameObject[targets.Length];
+                for (int i = 0; i < targets.Length; i++)
+                    gameObjects[i] = targets[i].gameObject;
+                Selection.objects = gameObjects;
             }
         }
-        else
+
+        if (GUILayout.Button("선택한 Object 핑 찍기"))
         {
-            duplicatedEditor = null;
-        }
-
-        if (duplicatedEditor != null)
-        {
-            duplicatedEditor.DrawHeader();
-            duplicatedEditor.OnInspectorGUI();
-
-            if (duplicatedDetailEditor != null)
-            {
-                for (int i = 0; i < duplicatedDetailEditor.Length; i++)
-                {
-                    detailFoldOut[i] = EditorGUILayout.Foldout(detailFoldOut[i], $"{duplicatedDetailEditor[i].GetType()}");
-
-                    if (detailFoldOut[i])
-                        duplicatedDetailEditor[i].OnInspectorGUI();
-                }
-            }
+            if (Selection.objects != null && Selection.objects.Length == 1)
+                EditorGUIUtility.PingObject(Selection.objects[0]);
         }
 
         #endregion
