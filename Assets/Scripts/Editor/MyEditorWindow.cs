@@ -1,6 +1,5 @@
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class MyEditorWindow : EditorWindow
 {
@@ -42,6 +41,13 @@ public class MyEditorWindow : EditorWindow
     // private Editor duplicatedEditor;
     // private Editor[] duplicatedDetailEditor;
     // private List<bool> detailFoldOut = new List<bool>();
+
+    #endregion
+
+    #region 에디터 전용 비휘발성 값 관리하기
+
+    private string stringValue;
+    private int intValue;
 
     #endregion
     
@@ -487,29 +493,60 @@ public class MyEditorWindow : EditorWindow
 
         #region 유저의 오브젝트 선택 직접 제어하기
 
-        if (GUILayout.Button("Scene에 있는 모든 GameObject 선택하기"))
+        // if (GUILayout.Button("Scene에 있는 모든 GameObject 선택하기"))
+        // {
+        //     GameObject[] targets = FindObjectsOfType<GameObject>(true);
+        //     if (targets != null)
+        //         Selection.objects = targets;
+        // }
+        //
+        // if (GUILayout.Button("모든 Text 선택하기"))
+        // {
+        //     Text[] targets = FindObjectsOfType<Text>();
+        //     if (targets != null)
+        //     {
+        //         GameObject[] gameObjects = new GameObject[targets.Length];
+        //         for (int i = 0; i < targets.Length; i++)
+        //             gameObjects[i] = targets[i].gameObject;
+        //         Selection.objects = gameObjects;
+        //     }
+        // }
+        //
+        // if (GUILayout.Button("선택한 Object 핑 찍기"))
+        // {
+        //     if (Selection.objects != null && Selection.objects.Length == 1)
+        //         EditorGUIUtility.PingObject(Selection.objects[0]);
+        // }
+
+        #endregion
+
+        #region 에디터 전용 비휘발성 값 관리하기
+
+        EditorGUILayout.BeginHorizontal();
         {
-            GameObject[] targets = FindObjectsOfType<GameObject>(true);
-            if (targets != null)
-                Selection.objects = targets;
+            EditorGUILayout.PrefixLabel("String");
+            stringValue = GUILayout.TextArea(stringValue);
+        }
+        EditorGUILayout.EndHorizontal();
+
+        intValue = EditorGUILayout.IntField("int", intValue);
+
+        if (GUILayout.Button("값 저장하기"))
+        {
+            EditorPrefs.SetString("MyStringKey", stringValue);
+            EditorPrefs.SetInt("MyIntKey", intValue);
         }
 
-        if (GUILayout.Button("모든 Text 선택하기"))
+        if (GUILayout.Button("값 로드"))
         {
-            Text[] targets = FindObjectsOfType<Text>();
-            if (targets != null)
-            {
-                GameObject[] gameObjects = new GameObject[targets.Length];
-                for (int i = 0; i < targets.Length; i++)
-                    gameObjects[i] = targets[i].gameObject;
-                Selection.objects = gameObjects;
-            }
+            stringValue = EditorPrefs.GetString("MyStringKey");
+            intValue = EditorPrefs.GetInt("MyIntKey");
         }
 
-        if (GUILayout.Button("선택한 Object 핑 찍기"))
+        if (GUILayout.Button("값 삭제하기"))
         {
-            if (Selection.objects != null && Selection.objects.Length == 1)
-                EditorGUIUtility.PingObject(Selection.objects[0]);
+            EditorPrefs.DeleteKey("MyStringKey");
+            EditorPrefs.DeleteKey("MyIntKey");
         }
 
         #endregion
