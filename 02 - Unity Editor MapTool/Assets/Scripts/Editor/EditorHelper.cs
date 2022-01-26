@@ -36,4 +36,19 @@ public static class EditorHelper
 
         return clicked;
     }
+
+    public static void Raycast(Vector3 rayOriginalPosition, Vector3 rayDestinationPosition, out Vector3 hitPosition)
+    {
+        Vector3 planePosition01 = Vector3.up;
+        Vector3 planePosition02 = Vector3.right;
+        Vector3 planePosition03 = Vector3.down;
+
+        Vector3 planeDirection = Vector3.Cross((planePosition02 - planePosition01).normalized, (planePosition03 - planePosition01).normalized);
+        Vector3 lineDirection = (rayDestinationPosition - rayOriginalPosition).normalized;
+
+        float dotLinePlane = Vector3.Dot(lineDirection, planeDirection);
+        float t = Vector3.Dot(planePosition01 - rayOriginalPosition, planeDirection) / dotLinePlane;
+
+        hitPosition = rayOriginalPosition + (lineDirection * t);
+    }
 }

@@ -11,7 +11,13 @@ public enum Mode
 public class MapToolWindow : EditorWindow
 {
     private Mode currentMode = Mode.None;
-    private bool IsCreatable => false;
+
+    public Vector2Int cellCount;
+    public Vector2 cellSize;
+
+    public CustomGrid grid;
+    
+    private bool IsCreatable => cellCount.x > 0 && cellCount.y > 0 && cellSize.x > 0 && cellSize.y > 0;
     
     [MenuItem("Tools/Open MapTool %q")]
     public static void Open()
@@ -23,11 +29,23 @@ public class MapToolWindow : EditorWindow
     private void OnEnable()
     {
         ChangeMode(Mode.Create);
+
+        SceneView.duringSceneGui -= OnSceneGui;
+        SceneView.duringSceneGui += OnSceneGui;
     }
 
     private void OnDisable()
     {
+        SceneView.duringSceneGui -= OnSceneGui;
+    }
+    
+    private void OnSceneGui(SceneView sceneView)
+    {
+        Vector2 currentMousePosition = Event.current.mousePosition;
+        Ray ray = HandleUtility.GUIPointToWorldRay(currentMousePosition);
         
+        EditorHelper.Raycast(ray.origin, ray.origin + ray.direction * 300, out Vector3 hitPosition);
+        Debug.Log(FindObjectOfType<CustomGrid>().GetCellCoordinate(hitPosition));
     }
 
     private void OnGUI()
@@ -50,15 +68,35 @@ public class MapToolWindow : EditorWindow
 
         using (var scope = new GUILayout.VerticalScope(GUI.skin.window))
         {
-            
+            cellCount = EditorGUILayout.Vector2IntField("Cell 개수", cellCount);
+            cellSize = EditorGUILayout.Vector2Field("Cell 크기", cellSize);
         }
 
         GUI.enabled = IsCreatable;
         if (EditorHelper.DrawButtonCenter("생성하기", new Vector2(80, 30)))
         {
-            Debug.Log("Create!");
+            grid = BuildGrid(cellCount, cellSize);
+            
+            ChangeMode(Mode.Edit);
         }
         GUI.enabled = true;
+    }
+
+    private CustomGrid BuildGrid(Vector2Int cellCount, Vector2 cellSize)
+    {
+        CustomGrid[] existGrids = FindObjectsOfType<CustomGrid>();
+
+        if (existGrids != null)
+        {
+            foreach (CustomGrid existGrid in existGrids)
+                DestroyImmediate(existGrid.gameObject);
+        }
+
+        CustomGrid grid = new GameObject("Grid").AddComponent<CustomGrid>();
+        grid.config = new CustomGridConfig();
+        grid.config.cellCount = cellCount;
+        grid.config.cellSize = cellSize;
+        return grid;
     }
 
     private void DrawEditMode()
