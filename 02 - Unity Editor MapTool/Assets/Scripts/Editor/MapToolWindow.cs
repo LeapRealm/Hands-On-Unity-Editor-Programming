@@ -45,7 +45,6 @@ public class MapToolWindow : EditorWindow
         Ray ray = HandleUtility.GUIPointToWorldRay(currentMousePosition);
         
         EditorHelper.Raycast(ray.origin, ray.origin + ray.direction * 300, out Vector3 hitPosition);
-        Debug.Log(FindObjectOfType<CustomGrid>().GetCellCoordinate(hitPosition));
     }
 
     private void OnGUI()
