@@ -329,21 +329,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config:
-    cellCount: {x: 3, y: 5}
+    cellCount: {x: 10, y: 5}
     cellSize: {x: 2, y: 2}
   horizontalLinePointPositions:
   - {x: 0, y: 0, z: 0}
-  - {x: 6, y: 0, z: 0}
+  - {x: 20, y: 0, z: 0}
   - {x: 0, y: 2, z: 0}
-  - {x: 6, y: 2, z: 0}
+  - {x: 20, y: 2, z: 0}
   - {x: 0, y: 4, z: 0}
-  - {x: 6, y: 4, z: 0}
+  - {x: 20, y: 4, z: 0}
   - {x: 0, y: 6, z: 0}
-  - {x: 6, y: 6, z: 0}
+  - {x: 20, y: 6, z: 0}
   - {x: 0, y: 8, z: 0}
-  - {x: 6, y: 8, z: 0}
+  - {x: 20, y: 8, z: 0}
   - {x: 0, y: 10, z: 0}
-  - {x: 6, y: 10, z: 0}
+  - {x: 20, y: 10, z: 0}
   verticalLinePointPositions:
   - {x: 0, y: 10, z: 0}
   - {x: 0, y: 0, z: 0}
@@ -353,6 +353,20 @@ MonoBehaviour:
   - {x: 4, y: 0, z: 0}
   - {x: 6, y: 10, z: 0}
   - {x: 6, y: 0, z: 0}
+  - {x: 8, y: 10, z: 0}
+  - {x: 8, y: 0, z: 0}
+  - {x: 10, y: 10, z: 0}
+  - {x: 10, y: 0, z: 0}
+  - {x: 12, y: 10, z: 0}
+  - {x: 12, y: 0, z: 0}
+  - {x: 14, y: 10, z: 0}
+  - {x: 14, y: 0, z: 0}
+  - {x: 16, y: 10, z: 0}
+  - {x: 16, y: 0, z: 0}
+  - {x: 18, y: 10, z: 0}
+  - {x: 18, y: 0, z: 0}
+  - {x: 20, y: 10, z: 0}
+  - {x: 20, y: 0, z: 0}
   reCalculate: 0
 --- !u!4 &1893133391
 Transform:

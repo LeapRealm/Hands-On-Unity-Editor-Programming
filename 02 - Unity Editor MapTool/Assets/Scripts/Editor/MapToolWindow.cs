@@ -8,14 +8,23 @@ public enum Mode
     Edit
 }
 
+public enum EditToolMode
+{
+    Paint,
+    Erase
+}
+
 public class MapToolWindow : EditorWindow
 {
     private Mode currentMode = Mode.None;
 
-    public Vector2Int cellCount;
-    public Vector2 cellSize;
+    private EditToolMode selectedEditToolMode = EditToolMode.Paint;
+    private GUIContent[] editToolModeContents;
 
-    public CustomGrid grid;
+    private Vector2Int cellCount;
+    private Vector2 cellSize;
+
+    private CustomGrid grid;
     
     private bool IsCreatable => cellCount.x > 0 && cellCount.y > 0 && cellSize.x > 0 && cellSize.y > 0;
     
@@ -28,6 +37,12 @@ public class MapToolWindow : EditorWindow
 
     private void OnEnable()
     {
+        editToolModeContents = new GUIContent[]
+        {
+            EditorGUIUtility.TrIconContent("Grid.PaintTool", "그리기 모드"),
+            EditorGUIUtility.TrIconContent("Grid.EraserTool", "지우기 모드")
+        };
+        
         ChangeMode(Mode.Create);
 
         SceneView.duringSceneGui -= OnSceneGui;
@@ -83,13 +98,7 @@ public class MapToolWindow : EditorWindow
 
     private CustomGrid BuildGrid(Vector2Int cellCount, Vector2 cellSize)
     {
-        CustomGrid[] existGrids = FindObjectsOfType<CustomGrid>();
-
-        if (existGrids != null)
-        {
-            foreach (CustomGrid existGrid in existGrids)
-                DestroyImmediate(existGrid.gameObject);
-        }
+        ClearAll();
 
         CustomGrid grid = new GameObject("Grid").AddComponent<CustomGrid>();
         grid.config = new CustomGridConfig();
@@ -100,7 +109,37 @@ public class MapToolWindow : EditorWindow
 
     private void DrawEditMode()
     {
-        EditorGUILayout.LabelField("편집 모드");
+        GUILayout.BeginHorizontal(EditorStyles.toolbar);
+        {
+            if (GUILayout.Button("생성 모드", EditorStyles.toolbarButton))
+            {
+                ClearAll();
+                ChangeMode(Mode.Create);
+            }
+            
+            GUILayout.FlexibleSpace();
+            
+            if (GUILayout.Button("불러오기", EditorStyles.toolbarButton))
+            {
+                
+            }
+            
+            if (GUILayout.Button("저장하기", EditorStyles.toolbarButton))
+            {
+                
+            }
+        }
+        GUILayout.EndHorizontal();
+        
+        EditorHelper.DrawLabelCenter(new GUIContent("편집 모드"), Color.white, 20, FontStyle.Bold);
+        
+        GUILayout.BeginHorizontal();
+        {
+            GUILayout.FlexibleSpace();
+            selectedEditToolMode = (EditToolMode)GUILayout.Toolbar((int)selectedEditToolMode, editToolModeContents, "LargeButton", GUILayout.Width(100), GUILayout.Height(40));
+            GUILayout.FlexibleSpace();
+        }
+        GUILayout.EndHorizontal();
     }
 
     private void ChangeMode(Mode newMode)
@@ -120,5 +159,18 @@ public class MapToolWindow : EditorWindow
         }
 
         currentMode = newMode;
+    }
+
+    private void ClearAll()
+    {
+        CustomGrid[] existGrids = FindObjectsOfType<CustomGrid>();
+
+        if (existGrids != null)
+        {
+            foreach (CustomGrid existGrid in existGrids)
+                DestroyImmediate(existGrid.gameObject);
+        }
+
+        grid = null;
     }
 }
