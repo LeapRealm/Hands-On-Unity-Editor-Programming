@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public static class EditorHelper
@@ -35,6 +36,50 @@ public static class EditorHelper
         GUILayout.Space(5);
 
         return clicked;
+    }
+
+    public static Vector2 DrawGridItems(Vector2 scrollPosition, int gapSpace, int itemCount, float areaWidth, Vector2 slotSize, Action<int> onDrawer)
+    {
+        scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+        {
+            int horizontalCount = (int)(areaWidth / slotSize.x);
+            
+            if (horizontalCount <= 0)
+                horizontalCount = 1;
+
+            int verticalCount = itemCount / horizontalCount;
+
+            if (itemCount % horizontalCount > 0)
+                verticalCount++;
+
+            if (verticalCount <= 0)
+                verticalCount = 1;
+            
+            GUILayout.BeginVertical();
+            {
+                for (int i = 0; i < verticalCount; i++)
+                {
+                    GUILayout.BeginHorizontal();
+                    {
+                        for (int j = 0; j < horizontalCount; j++)
+                        {
+                            int index = j + i * horizontalCount;
+                            if (index >= itemCount)
+                                break;
+
+                            onDrawer(index);
+                            
+                            GUILayout.Space(gapSpace);
+                        }
+                    }
+                    GUILayout.EndHorizontal();
+                }
+            }
+            GUILayout.EndVertical();
+        }
+        GUILayout.EndScrollView();
+
+        return scrollPosition;
     }
 
     public static void Raycast(Vector3 rayOriginalPosition, Vector3 rayDestinationPosition, out Vector3 hitPosition)

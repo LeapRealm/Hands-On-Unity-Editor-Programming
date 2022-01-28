@@ -21,12 +21,15 @@ public class MapToolWindow : EditorWindow
     private EditToolMode selectedEditToolMode = EditToolMode.Paint;
     private GUIContent[] editToolModeContents;
 
+    public CustomGridPalette palette;
+    public CustomGridPaletteDrawer paletteDrawer = new CustomGridPaletteDrawer();
+
     private Vector2Int cellCount;
     private Vector2 cellSize;
 
     private CustomGrid grid;
     
-    private bool IsCreatable => cellCount.x > 0 && cellCount.y > 0 && cellSize.x > 0 && cellSize.y > 0;
+    private bool IsCreatable => cellCount.x > 0 && cellCount.y > 0 && cellSize.x > 0 && cellSize.y > 0 && palette != null;
     
     [MenuItem("Tools/Open MapTool %q")]
     public static void Open()
@@ -84,6 +87,9 @@ public class MapToolWindow : EditorWindow
         {
             cellCount = EditorGUILayout.Vector2IntField("Cell 개수", cellCount);
             cellSize = EditorGUILayout.Vector2Field("Cell 크기", cellSize);
+            
+            palette = (CustomGridPalette)EditorGUILayout.ObjectField("팔레트", palette, typeof(CustomGridPalette), false);
+            paletteDrawer.palette = palette;
         }
 
         GUI.enabled = IsCreatable;
@@ -140,6 +146,13 @@ public class MapToolWindow : EditorWindow
             GUILayout.FlexibleSpace();
         }
         GUILayout.EndHorizontal();
+
+        Rect lastRect = GUILayoutUtility.GetLastRect();
+        Rect area = new Rect(0, lastRect.yMax, position.width, position.height - lastRect.yMax - 1);
+        
+        GUI.Box(area, GUIContent.none, GUI.skin.window);
+        
+        paletteDrawer.Draw(new Vector2(position.width, position.height));
     }
 
     private void ChangeMode(Mode newMode)
