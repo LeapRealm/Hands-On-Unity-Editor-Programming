@@ -54,15 +54,57 @@ public class MapToolWindow : EditorWindow
 
     private void OnDisable()
     {
+        ClearAll();
         SceneView.duringSceneGui -= OnSceneGui;
     }
     
     private void OnSceneGui(SceneView sceneView)
     {
-        Vector2 currentMousePosition = Event.current.mousePosition;
-        Ray ray = HandleUtility.GUIPointToWorldRay(currentMousePosition);
-        
-        EditorHelper.Raycast(ray.origin, ray.origin + ray.direction * 300, out Vector3 hitPosition);
+        if (currentMode != Mode.Edit)
+            return;
+
+        if (Event.current.button == 0 && Event.current.type == EventType.MouseDown)
+        {
+            Vector2 mousePosition = Event.current.mousePosition;
+            Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
+            EditorHelper.Raycast(ray.origin, ray.origin + ray.direction * 300, out Vector3 hitPosition);
+
+            Vector2Int cellCoordinate = grid.GetCellCoordinate(hitPosition);
+
+            if (grid.Contains(cellCoordinate))
+            {
+                switch (selectedEditToolMode)
+                {
+                    case EditToolMode.Paint:
+                        Paint(cellCoordinate);
+                        break;
+                    case EditToolMode.Erase:
+                        Erase(cellCoordinate);
+                        break;
+                }
+                Event.current.Use();
+            }
+        }
+    }
+
+    private void Paint(Vector2Int cellCoordinate)
+    {
+        CustomGridPaletteItem selectedItem = paletteDrawer.SelectedItem;
+        if (selectedItem == null)
+            return;
+
+        Erase(cellCoordinate);
+
+        MapObject target = grid.AddItem(cellCoordinate, selectedItem);
+    }
+    
+    private void Erase(Vector2Int cellCoordinate)
+    {
+        if (grid.IsItemExist(cellCoordinate))
+        {
+            DestroyImmediate(grid.GetItem(cellCoordinate).gameObject);
+            grid.RemoveItem(cellCoordinate);
+        }
     }
 
     private void OnGUI()
@@ -167,6 +209,7 @@ public class MapToolWindow : EditorWindow
                 break;
             
             case Mode.Edit:
+                SceneView.lastActiveSceneView.in2DMode = true;
                 Debug.Log("Changed to Edit Mode!");
                 break;
         }
