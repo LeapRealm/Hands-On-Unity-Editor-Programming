@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -169,12 +170,12 @@ public class MapToolWindow : EditorWindow
             
             if (GUILayout.Button("불러오기", EditorStyles.toolbarButton))
             {
-                
+                Load();
             }
             
             if (GUILayout.Button("저장하기", EditorStyles.toolbarButton))
             {
-                
+                Save();
             }
         }
         GUILayout.EndHorizontal();
@@ -195,6 +196,30 @@ public class MapToolWindow : EditorWindow
         GUI.Box(area, GUIContent.none, GUI.skin.window);
         
         paletteDrawer.Draw(new Vector2(position.width, position.height));
+    }
+
+    public void Save()
+    {
+        string path = EditorUtility.SaveFilePanel("맵 데이터 저장", Application.dataPath, "MapData.bin", "bin");
+
+        if (string.IsNullOrEmpty(path) == false)
+        {
+            byte[] buffer = grid.Serialize();
+            File.WriteAllBytes(path, buffer);
+            
+            ShowNotification(new GUIContent("저장 성공!"), 3);
+        }
+    }
+
+    public void Load()
+    {
+        string path = EditorUtility.OpenFilePanel("맵 데이터 불러오기", Application.dataPath, "bin");
+
+        if (string.IsNullOrEmpty(path) == false)
+        {
+            byte[] buffer = File.ReadAllBytes(path);
+            grid.Deserialize(buffer, palette);
+        }
     }
 
     private void ChangeMode(Mode newMode)

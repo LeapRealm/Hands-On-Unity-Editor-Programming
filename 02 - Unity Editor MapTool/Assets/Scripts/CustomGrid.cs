@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class CustomGrid : MonoBehaviour
@@ -90,5 +91,54 @@ public class CustomGrid : MonoBehaviour
     {
         if (items.ContainsKey(cellCoordinate))
             items.Remove(cellCoordinate);
+    }
+
+    public byte[] Serialize()
+    {
+        byte[] buffer = null;
+        using (MemoryStream memoryStream = new MemoryStream())
+        {
+            using (BinaryWriter writer = new BinaryWriter(memoryStream))
+            {
+                writer.Write(items.Count);
+
+                foreach (var item in items)
+                {
+                    writer.Write(item.Key.x);
+                    writer.Write(item.Key.y);
+                    writer.Write(item.Value.id);
+                }
+
+                buffer = memoryStream.ToArray();
+            }
+        }
+
+        return buffer;
+    }
+
+    public void Deserialize(byte[] buffer, CustomGridPalette palette)
+    {
+        foreach (var item in items)
+            DestroyImmediate(item.Value.gameObject);
+        
+        items.Clear();
+
+        using (MemoryStream memoryStream = new MemoryStream(buffer))
+        {
+            using (BinaryReader reader = new BinaryReader(memoryStream))
+            {
+                int count = reader.ReadInt32();
+
+                for (int i = 0; i < count; i++)
+                {
+                    int xCoordinate = reader.ReadInt32();
+                    int yCoordinate = reader.ReadInt32();
+                    int id = reader.ReadInt32();
+
+                    Vector2Int coordinate = new Vector2Int(xCoordinate, yCoordinate);
+                    AddItem(coordinate, palette.GetItem(id));
+                }
+            }
+        }
     }
 }
