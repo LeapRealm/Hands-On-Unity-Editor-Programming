@@ -28,6 +28,18 @@ public class CustomGrid : MonoBehaviour
         return new Vector3(cellCoordinate.x * config.cellSize.x + config.cellSize.x * 0.5f, cellCoordinate.y * config.cellSize.y + config.cellSize.y * 0.5f, 0);
     }
 
+    public void RefreshItems()
+    {
+        items.Clear();
+
+        MapObject[] mapObjects = FindObjectsOfType<MapObject>();
+        if (mapObjects != null)
+        {
+            foreach (MapObject mapObject in mapObjects)
+                items.Add(mapObject.cellCoordinate, mapObject);
+        }
+    }
+
     public void CalculateLinePoints()
     {
         int horizontalLinePointCount = config.cellCount.y * 2 + 2;

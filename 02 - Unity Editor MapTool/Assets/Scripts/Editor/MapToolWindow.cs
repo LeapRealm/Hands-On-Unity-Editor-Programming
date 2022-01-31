@@ -51,12 +51,21 @@ public class MapToolWindow : EditorWindow
 
         SceneView.duringSceneGui -= OnSceneGui;
         SceneView.duringSceneGui += OnSceneGui;
+
+        Undo.undoRedoPerformed -= OnUndoRedoPerformed;
+        Undo.undoRedoPerformed += OnUndoRedoPerformed;
+    }
+
+    private void OnUndoRedoPerformed()
+    {
+        grid.RefreshItems();
     }
 
     private void OnDisable()
     {
         ClearAll();
         SceneView.duringSceneGui -= OnSceneGui;
+        Undo.undoRedoPerformed -= OnUndoRedoPerformed;
     }
     
     private void OnSceneGui(SceneView sceneView)
@@ -97,13 +106,14 @@ public class MapToolWindow : EditorWindow
         Erase(cellCoordinate);
 
         MapObject target = grid.AddItem(cellCoordinate, selectedItem);
+        Undo.RegisterCreatedObjectUndo(target.gameObject, "Create MapObject");
     }
     
     private void Erase(Vector2Int cellCoordinate)
     {
         if (grid.IsItemExist(cellCoordinate))
         {
-            DestroyImmediate(grid.GetItem(cellCoordinate).gameObject);
+            Undo.DestroyObjectImmediate(grid.GetItem(cellCoordinate).gameObject);
             grid.RemoveItem(cellCoordinate);
         }
     }
