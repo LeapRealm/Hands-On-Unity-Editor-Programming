@@ -67,20 +67,24 @@ public class MapToolWindow : EditorWindow
         SceneView.duringSceneGui -= OnSceneGui;
         Undo.undoRedoPerformed -= OnUndoRedoPerformed;
     }
-    
+
+    private void Update()
+    {
+        SceneView.lastActiveSceneView.Repaint();
+    }
+
     private void OnSceneGui(SceneView sceneView)
     {
         if (currentMode != Mode.Edit)
             return;
+        
+        Vector2 mousePosition = Event.current.mousePosition;
+        Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
+        EditorHelper.Raycast(ray.origin, ray.origin + ray.direction * 300, out Vector3 hitPosition);
+        Vector2Int cellCoordinate = grid.GetCellCoordinate(hitPosition);
 
         if (Event.current.button == 0 && Event.current.type == EventType.MouseDown)
         {
-            Vector2 mousePosition = Event.current.mousePosition;
-            Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
-            EditorHelper.Raycast(ray.origin, ray.origin + ray.direction * 300, out Vector3 hitPosition);
-
-            Vector2Int cellCoordinate = grid.GetCellCoordinate(hitPosition);
-
             if (grid.Contains(cellCoordinate))
             {
                 switch (selectedEditToolMode)
@@ -95,6 +99,26 @@ public class MapToolWindow : EditorWindow
                 Event.current.Use();
             }
         }
+        
+        Handles.BeginGUI();
+        {
+            GUI.Label(new Rect(mousePosition.x, mousePosition.y + 10, 100, 50), cellCoordinate.ToString(), EditorStyles.boldLabel);
+
+            if (grid.IsItemExist(cellCoordinate))
+            {
+                CustomGridPaletteItem item = palette.GetItem(grid.GetItem(cellCoordinate).id);
+                Texture2D previewTexture = AssetPreview.GetAssetPreview(item.itemPrefab);
+
+                Rect rectBox = new Rect(10, 10, previewTexture.width + 10, previewTexture.height + 10);
+                Rect rectTexture = new Rect(15, 15, previewTexture.width, previewTexture.height);
+                Rect rectName = new Rect(rectBox.center.x - 25, rectBox.yMax - 25, 100, 10);
+                
+                GUI.Box(rectBox, GUIContent.none, GUI.skin.window);
+                GUI.DrawTexture(rectTexture, previewTexture);
+                GUI.Label(rectName, item.name, EditorStyles.boldLabel);
+            }
+        }
+        Handles.EndGUI();
     }
 
     private void Paint(Vector2Int cellCoordinate)
@@ -127,6 +151,19 @@ public class MapToolWindow : EditorWindow
                 break;
             
             case Mode.Edit:
+                if (Event.current.keyCode == KeyCode.Q && Event.current.type == EventType.KeyDown)
+                {
+                    selectedEditToolMode = EditToolMode.Paint;
+                    Repaint();
+                    Event.current.Use();
+                }
+                else if (Event.current.keyCode == KeyCode.W && Event.current.type == EventType.KeyDown)
+                {
+                    selectedEditToolMode = EditToolMode.Erase;
+                    Repaint();
+                    Event.current.Use();
+                }
+                
                 DrawEditMode();
                 break;
         }

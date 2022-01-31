@@ -88,7 +88,7 @@ public class CustomGrid : MonoBehaviour
             return null;
         }
 
-        GameObject target = Instantiate(paletteItem.itemGameObject, transform);
+        GameObject target = Instantiate(paletteItem.itemPrefab, transform);
         target.transform.position = GetCellPosition(cellCoordinate);
         MapObject targetMapObject = target.AddComponent<MapObject>();
         targetMapObject.id = paletteItem.id;

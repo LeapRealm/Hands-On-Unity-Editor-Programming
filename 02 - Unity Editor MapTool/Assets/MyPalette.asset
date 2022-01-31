@@ -15,10 +15,10 @@ MonoBehaviour:
   items:
   - id: 0
     name: Cube
-    itemGameObject: {fileID: 6980864656666662939, guid: 807d7090c3a137248a65944da7db0c60, type: 3}
+    itemPrefab: {fileID: 6980864656666662939, guid: 807d7090c3a137248a65944da7db0c60, type: 3}
   - id: 1
     name: Sphere
-    itemGameObject: {fileID: 7994085513129575099, guid: 275e246f5c58ec449ba5758d22d5aaf8, type: 3}
+    itemPrefab: {fileID: 7994085513129575099, guid: 275e246f5c58ec449ba5758d22d5aaf8, type: 3}
   - id: 2
     name: Capsule
-    itemGameObject: {fileID: 7941142036454945062, guid: 0a7affc4f709bfe4ba35969e9e0e7609, type: 3}
+    itemPrefab: {fileID: 7941142036454945062, guid: 0a7affc4f709bfe4ba35969e9e0e7609, type: 3}

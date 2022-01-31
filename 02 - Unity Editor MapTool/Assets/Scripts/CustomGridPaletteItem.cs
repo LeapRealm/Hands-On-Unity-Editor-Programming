@@ -6,5 +6,5 @@ public class CustomGridPaletteItem
 {
     public int id;
     public string name;
-    public GameObject itemGameObject;
+    public GameObject itemPrefab;
 }

@@ -7,7 +7,7 @@ public class CustomGridPaletteItemDrawer
     {
         Rect area = GUILayoutUtility.GetRect(slotSize.x, slotSize.y, GUIStyle.none, GUILayout.MaxWidth(slotSize.x), GUILayout.MaxHeight(slotSize.y));
 
-        bool selected = GUI.Button(area, AssetPreview.GetAssetPreview(item.itemGameObject));
+        bool selected = GUI.Button(area, AssetPreview.GetAssetPreview(item.itemPrefab));
         GUI.Label(new Rect(area.center.x, area.center.y, 100, 50), item.name);
 
         if (isSelected)
